@@ -109,8 +109,10 @@ class FileLocker implements FileLockerInterface
 
         $lockFile = $this->getLockFilePath();
         $fp = fopen($lockFile, 'w+');
-        if (!flock($fp, LOCK_EX)) {
-            throw new Exception('Another process holds the lock!');
+        if (!flock($fp, LOCK_EX|LOCK_NB, $wouldBlock)) {
+            if ($wouldBlock) {
+                throw new Exception('Another process holds the lock!');
+            }
         }
         fclose($fp);
     }
