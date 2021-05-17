@@ -1,6 +1,9 @@
 # dot-cli
 
-DotKernel component to build console applications based on laminas-cli
+![OSS Lifecycle](https://img.shields.io/osslifecycle/dotkernel/dot-cli)
+[![GitHub license](https://img.shields.io/github/license/dotkernel/dot-cli)](https://github.com/dotkernel/dot-cli/LICENSE)
+
+DotKernel component to build console applications based on [laminas-cli](https://github.com/laminas/laminas-cli).
 
 ### Requirements
 - PHP >= 7.4
