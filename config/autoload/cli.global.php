@@ -10,9 +10,8 @@ return [
     'dot_cli' => [
         'version' => '1.0.0',
         'name' => 'DotKernel CLI',
-        'showVersion' => true,
         'commands' => [
-            'demo-command' => DemoCommand::class,
+            DemoCommand::getDefaultName() => DemoCommand::class,
         ]
     ],
     FileLockerInterface::class => [

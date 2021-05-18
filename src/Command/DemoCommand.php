@@ -16,7 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class DemoCommand extends Command
 {
-    protected static $defaultName = 'demo-command';
+    protected static $defaultName = 'demo:command';
 
     /**
      * @return void

@@ -90,7 +90,8 @@ class FileLocker implements FileLockerInterface
      */
     public function getLockFilePath(): string
     {
-        return sprintf('%s/command-%s.lock', $this->dirPath, $this->commandName);
+        $commandName = str_replace(':', '-', $this->commandName);
+        return sprintf('%s/command-%s.lock', $this->dirPath, $commandName);
     }
 
     /**
