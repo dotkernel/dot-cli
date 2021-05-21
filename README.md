@@ -52,20 +52,21 @@ Options:
   -v|vv|vvv, --verbose  Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
 
 Available commands:
-  demo-command  Demo command description.
   help          Display help for a command
   list          List commands
+ demo
+  demo:command  Demo command description.
 ```
-As shown in `config/autoload/cli.global.php`, dot-cli includes a demo command `demo-command` that will help you understand the basics of creating a new command.
+As shown in `config/autoload/cli.global.php`, dot-cli includes a demo command `demo:command` that will help you understand the basics of creating a new command.
 For more information, see [laminas-cli documentation](https://docs.laminas.dev/laminas-cli/).
 
 ### Setting up as cronjob
 ```text
-*   *   *   *   *   /opt/plesk/php/7.4/bin/php /var/www/vhosts/example.com/httpdocs/bin/cli.php demo-command -q
+*   *   *   *   *   /opt/plesk/php/7.4/bin/php /var/www/vhosts/example.com/httpdocs/bin/cli.php demo:command -q
 ```
 or
 ```text
-*   *   *   *   *   cd /var/www/vhosts/example.com/httpdocs/bin && /opt/plesk/php/7.4/bin/php ./cli.php demo-command -q
+*   *   *   *   *   cd /var/www/vhosts/example.com/httpdocs/bin && /opt/plesk/php/7.4/bin/php ./cli.php demo:command -q
 ```
 Adapt the command to your specifications by replacing **7.4** with your PHP version and **example.com** with your domain name.
 

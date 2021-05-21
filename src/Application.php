@@ -45,8 +45,7 @@ class Application extends \Symfony\Component\Console\Application
      */
     public function doRun(InputInterface $input, OutputInterface $output): int
     {
-        $commandName = $this->getCommandName($input);
-        $this->fileLocker->setCommandName($commandName)->setEnabled(true);
+        $this->fileLocker->setCommandName($this->getCommandName($input));
 
         try {
             $this->fileLocker->lock();
