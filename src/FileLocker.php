@@ -25,7 +25,19 @@ class FileLocker implements FileLockerInterface
     private bool $enabled;
     private ?string $dirPath;
     private ?string $commandName;
-
+    private $lockFile;
+    
+    /**
+     * @return $this
+     */
+    public function initLockFile(): self
+    {
+        if ($this->enabled) {
+            $this->lockFile = fopen($this->getLockFilePath(), 'w+');
+        }
+        return $this;
+    }
+    
     /**
      * @return bool
      */
@@ -86,6 +98,25 @@ class FileLocker implements FileLockerInterface
     }
 
     /**
+     * @return false|resource
+     */
+    public function getLockFile(): bool
+    {
+        return $this->lockFile;
+    }
+
+    /**
+     * @param bool $lockFile
+     * @return $this
+     */
+    public function setLockFile(bool $lockFile): self
+    {
+        $this->lockFile = $lockFile;
+        
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function getLockFilePath(): string
@@ -104,18 +135,11 @@ class FileLocker implements FileLockerInterface
             return;
         }
 
-        if (!is_dir($this->dirPath)) {
-            mkdir($this->dirPath);
-        }
-
-        $lockFile = $this->getLockFilePath();
-        $fp = fopen($lockFile, 'w+');
-        if (!flock($fp, LOCK_EX|LOCK_NB, $wouldBlock)) {
+        if (!flock($this->lockFile, LOCK_EX|LOCK_NB, $wouldBlock)) {
             if ($wouldBlock) {
-                throw new Exception('Another process holds the lock!');
+                throw new \Exception('Another process holds the lock!');
             }
         }
-        fclose($fp);
     }
 
     /**
@@ -126,15 +150,8 @@ class FileLocker implements FileLockerInterface
         if (!$this->enabled) {
             return;
         }
-
-        $lockFile = $this->getLockFilePath();
-        if (!file_exists($lockFile)) {
-            return;
-        }
-
-        $fp = fopen($lockFile, 'w+');
-        flock($fp, LOCK_UN);
-        fclose($fp);
-        unlink($lockFile);
+        
+        flock($this->lockFile, LOCK_UN);
+        fclose($this->lockFile);
     }
 }
