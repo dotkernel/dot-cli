@@ -7,7 +7,7 @@ namespace Dot\Cli\Factory;
 use Dot\Cli\FileLockerInterface;
 use Laminas\Cli\ContainerCommandLoader;
 use Laminas\Cli\Listener\TerminateListener;
-use PackageVersions\Versions;
+use Composer\InstalledVersions;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\ConsoleEvents;
@@ -29,8 +29,7 @@ class ApplicationFactory
         $config = $container->get('config')['dot_cli'] ?? [];
         Assert::isMap($config);
 
-        /** @psalm-suppress DeprecatedClass */
-        $version = strstr(Versions::getVersion('laminas/laminas-cli'), '@', true);
+        $version = InstalledVersions::getPrettyVersion('laminas/laminas-cli');
         Assert::string($version);
 
         $commands = $config['commands'] ?? [];
