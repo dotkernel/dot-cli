@@ -32,9 +32,8 @@ class FileLocker implements FileLockerInterface
      */
     public function initLockFile(): self
     {
-        if ($this->enabled) {
-            $this->lockFile = fopen($this->getLockFilePath(), 'w+');
-        }
+        $this->lockFile = fopen($this->getLockFilePath(), 'w+');
+
         return $this;
     }
     
@@ -135,6 +134,12 @@ class FileLocker implements FileLockerInterface
             return;
         }
 
+        if (empty($this->commandName)) {
+            return;
+        }
+
+        $this->initLockFile();
+
         if (!flock($this->lockFile, LOCK_EX|LOCK_NB, $wouldBlock)) {
             if ($wouldBlock) {
                 throw new \Exception('Another process holds the lock!');
@@ -150,7 +155,11 @@ class FileLocker implements FileLockerInterface
         if (!$this->enabled) {
             return;
         }
-        
+
+        if (empty($this->commandName)) {
+            return;
+        }
+
         flock($this->lockFile, LOCK_UN);
         fclose($this->lockFile);
     }
