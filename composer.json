@@ -19,7 +19,6 @@
     ],
     "require": {
         "php": "~7.4.0 || ~8.0.0 || ~8.1.0",
-        "laminas/laminas-dependency-plugin": "^2.2.0",
         "laminas/laminas-cli": "^1.4.0",
         "laminas/laminas-servicemanager": "^3.11.1"
     },
