@@ -4,57 +4,38 @@ declare(strict_types=1);
 
 namespace Dot\Cli;
 
-/**
- * Interface FileLocker
- * @package Dot\Cli
- */
+use Exception;
+
 interface FileLockerInterface
 {
-    /**
-     * @return bool
-     */
+    public function initLockFile(): self;
+
+    public function enable(): self;
+
+    public function disable(): self;
+
     public function isEnabled(): bool;
 
-    /**
-     * @param bool $enabled
-     * @return self
-     */
     public function setEnabled(bool $enabled): self;
 
-    /**
-     * @return string|null
-     */
     public function getDirPath(): ?string;
 
-    /**
-     * @param string|null $dirPath
-     * @return $this
-     */
     public function setDirPath(?string $dirPath): self;
 
-    /**
-     * @return string|null
-     */
     public function getCommandName(): ?string;
 
-    /**
-     * @param string|null $commandName
-     * @return $this
-     */
     public function setCommandName(?string $commandName): self;
 
-    /**
-     * @return string
-     */
+    public function getLockFile(): mixed;
+
+    public function setLockFile(mixed $lockFile): self;
+
     public function getLockFilePath(): string;
 
     /**
-     * @return void
+     * @throws Exception
      */
     public function lock(): void;
 
-    /**
-     * @return void
-     */
     public function unlock(): void;
 }

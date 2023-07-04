@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="5.13.1@086b94371304750d1c673315321a55d15fc59015">
+    <file src="src/Factory/ApplicationFactory.php">
+        <InternalClass>
+            <code>new TerminateListener($config)</code>
+            <code>new ContainerCommandLoader($container, $config['commands'])</code>
+        </InternalClass>
+        <InternalMethod>
+            <code>new TerminateListener($config)</code>
+            <code>new ContainerCommandLoader($container, $config['commands'])</code>
+        </InternalMethod>
+    </file>
+</files>

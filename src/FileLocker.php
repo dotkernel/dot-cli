@@ -7,48 +7,61 @@ namespace Dot\Cli;
 use Exception;
 
 use function fclose;
-use function file_exists;
 use function flock;
 use function fopen;
-use function is_dir;
-use function mkdir;
 use function rtrim;
 use function sprintf;
-use function unlink;
+use function str_replace;
 
-/**
- * Class FileLocker
- * @package Dot\Cli
- */
+use const LOCK_EX;
+use const LOCK_NB;
+use const LOCK_UN;
+
 class FileLocker implements FileLockerInterface
 {
     private bool $enabled;
     private ?string $dirPath;
     private ?string $commandName;
-    private $lockFile;
-    
-    /**
-     * @return $this
-     */
+    private mixed $lockFile;
+
+    public function __construct(
+        bool $enabled = false,
+        ?string $dirPath = null,
+        ?string $commandName = null,
+        mixed $lockFile = null,
+    ) {
+        $this->enabled     = $enabled;
+        $this->dirPath     = $dirPath;
+        $this->commandName = $commandName;
+        $this->lockFile    = $lockFile;
+    }
+
     public function initLockFile(): self
     {
         $this->lockFile = fopen($this->getLockFilePath(), 'w+');
 
         return $this;
     }
-    
-    /**
-     * @return bool
-     */
+
+    public function enable(): self
+    {
+        $this->enabled = true;
+
+        return $this;
+    }
+
+    public function disable(): self
+    {
+        $this->enabled = false;
+
+        return $this;
+    }
+
     public function isEnabled(): bool
     {
         return $this->enabled;
     }
 
-    /**
-     * @param bool $enabled
-     * @return $this
-     */
     public function setEnabled(bool $enabled): self
     {
         $this->enabled = $enabled;
@@ -56,39 +69,25 @@ class FileLocker implements FileLockerInterface
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getDirPath(): ?string
     {
         return $this->dirPath;
     }
 
-    /**
-     * @param string|null $dirPath
-     * @return $this
-     */
     public function setDirPath(?string $dirPath): self
     {
-        $dirPath = rtrim($dirPath, '/');
-        $dirPath = rtrim($dirPath, '\\');
+        $dirPath       = rtrim($dirPath, '/');
+        $dirPath       = rtrim($dirPath, '\\');
         $this->dirPath = $dirPath;
 
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getCommandName(): ?string
     {
         return $this->commandName;
     }
 
-    /**
-     * @param string|null $commandName
-     * @return $this
-     */
     public function setCommandName(?string $commandName): self
     {
         $this->commandName = $commandName;
@@ -96,41 +95,33 @@ class FileLocker implements FileLockerInterface
         return $this;
     }
 
-    /**
-     * @return false|resource
-     */
-    public function getLockFile(): bool
+    public function getLockFile(): mixed
     {
         return $this->lockFile;
     }
 
-    /**
-     * @param bool $lockFile
-     * @return $this
-     */
-    public function setLockFile(bool $lockFile): self
+    public function setLockFile(mixed $lockFile): self
     {
         $this->lockFile = $lockFile;
-        
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getLockFilePath(): string
     {
-        $commandName = str_replace(':', '-', $this->commandName);
-        return sprintf('%s/command-%s.lock', $this->dirPath, $commandName);
+        return sprintf(
+            '%s/command-%s.lock',
+            $this->dirPath,
+            str_replace(':', '-', $this->commandName)
+        );
     }
 
     /**
-     * @throws Exception
-     * @return void
+     * @inheritDoc
      */
     public function lock(): void
     {
-        if (!$this->enabled) {
+        if (! $this->enabled) {
             return;
         }
 
@@ -140,19 +131,16 @@ class FileLocker implements FileLockerInterface
 
         $this->initLockFile();
 
-        if (!flock($this->lockFile, LOCK_EX|LOCK_NB, $wouldBlock)) {
+        if (! flock($this->lockFile, LOCK_EX | LOCK_NB, $wouldBlock)) {
             if ($wouldBlock) {
-                throw new \Exception('Another process holds the lock!');
+                throw new Exception('The file lock is being held by a different process');
             }
         }
     }
 
-    /**
-     * @return void
-     */
     public function unlock(): void
     {
-        if (!$this->enabled) {
+        if (! $this->enabled) {
             return;
         }
 

@@ -1,33 +1,38 @@
 # dot-cli
 
 ![OSS Lifecycle](https://img.shields.io/osslifecycle/dotkernel/dot-cli)
-![PHP from Packagist (specify version)](https://img.shields.io/packagist/php-v/dotkernel/dot-cli/3.2.0)
+![PHP from Packagist (specify version)](https://img.shields.io/packagist/php-v/dotkernel/dot-cli/3.4.0)
 
 [![GitHub issues](https://img.shields.io/github/issues/dotkernel/dot-cli)](https://github.com/dotkernel/dot-cli/issues)
 [![GitHub forks](https://img.shields.io/github/forks/dotkernel/dot-cli)](https://github.com/dotkernel/dot-cli/network)
 [![GitHub stars](https://img.shields.io/github/stars/dotkernel/dot-cli)](https://github.com/dotkernel/dot-cli/stargazers)
 [![GitHub license](https://img.shields.io/github/license/dotkernel/dot-cli)](https://github.com/dotkernel/dot-cli/blob/3.0/LICENSE)
 
+[![Build Static](https://github.com/dotkernel/dot-cli/actions/workflows/static-analysis.yml/badge.svg?branch=3.0)](https://github.com/dotkernel/dot-cli/actions/workflows/static-analysis.yml)
+
+[![SymfonyInsight](https://insight.symfony.com/projects/b9489f03-14e3-441f-aefd-e3b549b4917e/big.svg)](https://insight.symfony.com/projects/b9489f03-14e3-441f-aefd-e3b549b4917e)
+
 DotKernel component to build console applications based on [laminas-cli](https://github.com/laminas/laminas-cli).
 
 ### Requirements
-- PHP >= 7.4
-- laminas/laminas-servicemanager >= 3.6,
-- laminas/laminas-cli >= 1.0
+- PHP >= 8.1
+- laminas/laminas-servicemanager >= 3.11,
+- laminas/laminas-cli >= 1.4
 
 
 ### Setup
 #### 1. Install package
 Run the following command in your application's root directory:
-```bash
-$ composer require dotkernel/dot-cli
-```
+
+    composer require dotkernel/dot-cli
 
 #### 2. Register ConfigProvider
-Open your application's `config/config.php` and add `Dot\Cli\ConfigProvider::class,` under the _DK packages_ comment.
+Open your application's `config/config.php` and the following line under the _DK packages_ comment:
+
+     Dot\Cli\ConfigProvider::class,
 
 #### 3. Copy bootstrap file
-Locate in this package the following file `bin/cli.php` then copy it to your application's `bin/` directory.
+Locate file `bin/cli.php` in this package, then copy it to your application's `bin/` directory.
 This is the bootstrap file you will use to execute your commands with.
 
 #### 4. Copy config file
@@ -37,9 +42,9 @@ This is the config file you will add your commands to.
 
 ### Testing
 Using the command line, go to your application's root directory, then type the following command:
-```bash
-$ php /bin/cli.php
-```
+
+    php /bin/cli.php
+
 The output should look similar to this, containing information on how to start using dot-cli:
 ```text
 DotKernel CLI 1.0.0
