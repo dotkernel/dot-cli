@@ -4,7 +4,7 @@
          bootstrap="./vendor/autoload.php"
          colors="true">
   <testsuites>
-    <testsuite name="Dot-GeoIP Test Suite">
+    <testsuite name="Dot-CLI Test Suite">
       <directory>./test</directory>
     </testsuite>
   </testsuites>
