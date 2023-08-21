@@ -30,7 +30,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Dot\\Cli\\": "src"
+            "Dot\\Cli\\": "src/"
         }
     },
     "require-dev": {
