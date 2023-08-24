@@ -134,6 +134,17 @@ class FileLockerTest extends TestCase
         $this->assertNull($fileLocker->getLockFile());
     }
 
+    public function testWillNotUnlockWhenEnabledAndWithoutValidCommandName(): void
+    {
+        $config = $this->getConfig();
+
+        $fileLocker = new FileLocker(true, $config['dirPath']);
+        $this->assertNull($fileLocker->getLockFile());
+        $fileLocker->unlock();
+        $this->assertInstanceOf(FileLocker::class, $fileLocker);
+        $this->assertNull($fileLocker->getLockFile());
+    }
+
     /**
      * @throws Exception
      */
