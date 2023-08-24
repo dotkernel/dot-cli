@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class ApplicationFactoryTest extends TestCase
 {
@@ -129,12 +130,13 @@ class ApplicationFactoryTest extends TestCase
 
         $container->method('has')->willReturnMap([
             ['config', true],
-            ['Dot\Cli\Factory\SymfonyEventDispatcher', false],
+            ['Dot\Cli\Factory\SymfonyEventDispatcher', true],
             [FileLockerInterface::class, true],
         ]);
 
         $container->method('get')->willReturnMap([
             ['config', $this->getConfig()],
+            ['Dot\Cli\Factory\SymfonyEventDispatcher', new EventDispatcher()],
             [FileLockerInterface::class, $fileLocker],
         ]);
 
