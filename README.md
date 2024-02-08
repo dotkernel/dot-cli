@@ -16,7 +16,7 @@
 DotKernel component to build console applications based on [laminas-cli](https://github.com/laminas/laminas-cli).
 
 ### Requirements
-- PHP >= 8.1
+- PHP >= 8.2
 - laminas/laminas-servicemanager >= 3.11,
 - laminas/laminas-cli >= 1.4
 
