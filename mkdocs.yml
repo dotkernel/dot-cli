@@ -8,11 +8,12 @@ extra:
 nav:
   - Home: index.md
   - v3:
-      - Configuration: v3/configuration.md
       - Installation: v3/installation.md
-      - "Setting Up As Cronjob": v3/setting-up-as-cronjob.md
+      - Configuration: v3/configuration.md
+      - "Lock Files": v3/lock-files.md
       - Testing: v3/testing.md
       - Usage: v3/usage.md
+      - "Setting Up As Cronjob": v3/setting-up-as-cronjob.md
 site_name: dot-cli
 site_description: "DotKernel's component to build console applications"
 repo_url: "https://github.com/dotkernel/dot-cli"
