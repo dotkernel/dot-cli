@@ -1,5 +1,10 @@
 # dot-cli
 
+> [!IMPORTANT]
+> dot-cli is a wrapper on top of [laminas-cli](https://github.com/laminas/laminas-cli)
+>
+> ![OSS Lifecycle](https://img.shields.io/osslifecycle/laminas/laminas-cli)
+
 ![OSS Lifecycle](https://img.shields.io/osslifecycle/dotkernel/dot-cli)
 ![PHP from Packagist (specify version)](https://img.shields.io/packagist/php-v/dotkernel/dot-cli/3.4.2)
 
