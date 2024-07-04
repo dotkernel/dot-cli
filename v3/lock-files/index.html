@@ -18,9 +18,11 @@
         <meta name="docsearch:component" content="dot-cli">
 
         
+        <link rel="canonical" href="https://docs.dotkernel.org/dot-cli/v3/lock-files/">
+        
         <link rel="shortcut icon" href="https://docs.dotkernel.org/img/dk_docs_favicon_white.svg">
 
-        <title>dot-cli - DotKernel Documentation</title>
+        <title>Lock Files - dot-cli - DotKernel Documentation</title>
 
         <link rel="stylesheet" href="https://docs.dotkernel.org/css/bootstrap.css">
         <link rel="stylesheet" href="https://docs.dotkernel.org/css/bootstrap-icons.min.css">
@@ -135,11 +137,16 @@
                 
 
                 
-                    <li class="breadcrumb-item"><a href="../.">dot-cli</a></li>
+                    <li class="breadcrumb-item"><a href="../..">dot-cli</a></li>
 
                     
+                        
+                            
+                            
+                        
+                    
 
-                    <li class="breadcrumb-item active" aria-current="page"></li>
+                    <li class="breadcrumb-item active" aria-current="page">Lock Files</li>
                 
             
         </ol>
@@ -154,7 +161,7 @@
                     
     <div class="subnavigation hidden-print">
 <!--        <h4 class="subnavigation__title">-->
-<!--            <a href="../.">dot-cli</a>-->
+<!--            <a href="../..">dot-cli</a>-->
 <!--        </h4>-->
 
         <h5 class="subnavigation__title">Table of Contents</h5>
@@ -164,8 +171,48 @@
 
                 
                 
+                    
+                        
+<li class="subnavigation__list-item ">
+    <a href="../overview/" class="subnavigation__link">Overview</a>
+</li>
 
                     
+                        
+<li class="subnavigation__list-item ">
+    <a href="../installation/" class="subnavigation__link">Installation</a>
+</li>
+
+                    
+                        
+<li class="subnavigation__list-item ">
+    <a href="../configuration/" class="subnavigation__link">Configuration</a>
+</li>
+
+                    
+                        
+<li class="subnavigation__list-item subnavigation__list-item--active">
+    <a href="./" class="subnavigation__link">Lock Files</a>
+</li>
+
+                    
+                        
+<li class="subnavigation__list-item ">
+    <a href="../testing/" class="subnavigation__link">Testing</a>
+</li>
+
+                    
+                        
+<li class="subnavigation__list-item ">
+    <a href="../usage/" class="subnavigation__link">Usage</a>
+</li>
+
+                    
+                        
+<li class="subnavigation__list-item ">
+    <a href="../setting-up-as-cronjob/" class="subnavigation__link">Setting Up As Cronjob</a>
+</li>
+
                     
                 
             
@@ -177,22 +224,78 @@
                     
                     
                     
+    
+
+    
+    
+        <div class="toc">
+            <h6 class="toc__headline">On this page</h6>
+            <ul class="toc__list">
+            
+                <li class="toc__entry">
+                    <a href="#configuration" class="toc__link nav-link">Configuration</a>
+                </li>
+            
+            </ul>
+        </div>
+    
+
                     
                 </div>
                 <div class="col-lg-9 main_docs">
                     
-
-<h1 class="content__title">404</h1>
-<blockquote>
-    <h3>Something went wrong!</h3>
-    <p>
-        We're sorry, but the page you are looking for does not exist.
-    </p>
-</blockquote>
-
-<a href="../." class="btn btn-default" role="button">Go to homepage</a>
+                    
 
 
+
+
+    
+    
+
+    <h1 id="lock-files">Lock Files</h1>
+<p>When a command starts running, a lock file is created for that command.
+The lock file ensures that the same command would not run before the previous one is done.
+If a command was force stopped, locate the lock file in the configured directory and delete it to refresh the command.</p>
+<h2 id="configuration">Configuration</h2>
+<p>Inside <code>config/autoload/cli.global.php</code> under the <code>FileLockerInterface::class</code> key the file locker can be disabled and the location of the lock files can be changed</p>
+<pre class="codehilite"><code>FileLockerInterface::class =&gt; [
+    'enabled' =&gt; true,
+    'dirPath' =&gt; getcwd() . '/data/lock',
+],
+</code></pre>
+
+
+
+
+    <nav>
+    <ul class="page-nav hidden-print">
+        
+        <li class="page-nav__item">
+            
+                <a rel="prev" class="page-nav__link page-nav__link--prev" href="../configuration/">
+                    <small class="page-nav__label">Previous</small>
+                    <i class="bi bi-chevron-left"></i>
+                    Configuration
+                </a>
+            
+        </li>
+
+        
+        <li class="page-nav__item">
+            
+                <a rel="next" class="page-nav__link page-nav__link--next" href="../testing/">
+                    <small class="page-nav__label">Next</small>
+                    Testing
+                    <i class="bi bi-chevron-right"></i>
+                </a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+
+                    
                 </div>
             </div>
         </div>
@@ -286,7 +389,7 @@
 </footer>
 
         <script>
-            let base_url = '..',
+            let base_url = '../..',
                 project  = "packages",
                 siteName = 'dot-cli';
 
