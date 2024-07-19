@@ -3,7 +3,7 @@
 > [!IMPORTANT]
 > dot-cli is a wrapper on top of [laminas-cli](https://github.com/laminas/laminas-cli)
 >
-> ![OSS Lifecycle](https://img.shields.io/osslifecycle/laminas/laminas-cli)
+> ![Dynamic JSON Badge](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.github.com%2Frepos%2Flaminas%2Flaminas-cli%2Fproperties%2Fvalues&query=%24%5B%3F(%40.property_name%3D%3D%22maintenance-mode%22)%5D.value&label=Maintenance%20Mode)
 
 ![OSS Lifecycle](https://img.shields.io/osslifecycle/dotkernel/dot-cli)
 ![PHP from Packagist (specify version)](https://img.shields.io/packagist/php-v/dotkernel/dot-cli/3.4.2)
