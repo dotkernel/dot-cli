@@ -2,11 +2,9 @@
 
 > [!IMPORTANT]
 > dot-cli is a wrapper on top of [laminas-cli](https://github.com/laminas/laminas-cli)
->
-> ![Dynamic JSON Badge](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.github.com%2Frepos%2Flaminas%2Flaminas-cli%2Fproperties%2Fvalues&query=%24%5B%3F(%40.property_name%3D%3D%22maintenance-mode%22)%5D.value&label=Maintenance%20Mode)
 
 ![OSS Lifecycle](https://img.shields.io/osslifecycle/dotkernel/dot-cli)
-![PHP from Packagist (specify version)](https://img.shields.io/packagist/php-v/dotkernel/dot-cli/3.4.2)
+![PHP from Packagist (specify version)](https://img.shields.io/packagist/php-v/dotkernel/dot-cli/3.7.0)
 
 [![GitHub issues](https://img.shields.io/github/issues/dotkernel/dot-cli)](https://github.com/dotkernel/dot-cli/issues)
 [![GitHub forks](https://img.shields.io/github/forks/dotkernel/dot-cli)](https://github.com/dotkernel/dot-cli/network)
@@ -16,14 +14,12 @@
 [![Build Static](https://github.com/dotkernel/dot-cli/actions/workflows/continuous-integration.yml/badge.svg?branch=3.0)](https://github.com/dotkernel/dot-cli/actions/workflows/continuous-integration.yml)
 [![codecov](https://codecov.io/gh/dotkernel/dot-cli/graph/badge.svg?token=0DFCK2GUBT)](https://codecov.io/gh/dotkernel/dot-cli)
 
-[![SymfonyInsight](https://insight.symfony.com/projects/b9489f03-14e3-441f-aefd-e3b549b4917e/big.svg)](https://insight.symfony.com/projects/b9489f03-14e3-441f-aefd-e3b549b4917e)
-
 DotKernel component to build console applications based on [laminas-cli](https://github.com/laminas/laminas-cli).
 
 ## Requirements
 
 - PHP >= 8.2
-- laminas/laminas-servicemanager >= 3.11,
+- laminas/laminas-servicemanager >= 3.11 || >= 4.0,
 - laminas/laminas-cli >= 1.4
 
 ## Setup
@@ -32,13 +28,17 @@ DotKernel component to build console applications based on [laminas-cli](https:/
 
 Run the following command in your application's root directory:
 
-    composer require dotkernel/dot-cli
+```shell
+composer require dotkernel/dot-cli
+```
 
 ### 2. Register ConfigProvider
 
 Open your application's `config/config.php` and the following line under the _DK packages_ comment:
 
-     Dot\Cli\ConfigProvider::class,
+```php
+Dot\Cli\ConfigProvider::class,
+```
 
 ### 3. Copy bootstrap file
 
@@ -54,10 +54,13 @@ This is the config file you will add your commands to.
 
 Using the command line, go to your application's root directory, then type the following command:
 
-    php ./bin/cli.php
+```shell
+php ./bin/cli.php
+```
 
 The output should look similar to this, containing information on how to start using dot-cli:
 
+```text
     DotKernel CLI 1.0.0
     
     Usage:
@@ -77,17 +80,22 @@ The output should look similar to this, containing information on how to start u
       list          List commands
      demo
       demo:command  Demo command description.
+```
 
 As shown in `config/autoload/cli.global.php`, dot-cli includes a demo command `demo:command` that will help you understand the basics of creating a new command.
 For more information, see [laminas-cli documentation](https://docs.laminas.dev/laminas-cli/).
 
 ## Setting up as cronjob
 
-    *   *   *   *   *   /opt/plesk/php/7.4/bin/php /var/www/vhosts/example.com/httpdocs/bin/cli.php demo:command -q
+```text
+*   *   *   *   *   /opt/plesk/php/7.4/bin/php /var/www/vhosts/example.com/httpdocs/bin/cli.php demo:command -q
+```
 
 or
 
-    *   *   *   *   *   cd /var/www/vhosts/example.com/httpdocs/bin && /opt/plesk/php/7.4/bin/php ./cli.php demo:command -q
+```text
+*   *   *   *   *   cd /var/www/vhosts/example.com/httpdocs/bin && /opt/plesk/php/7.4/bin/php ./cli.php demo:command -q
+```
 
 Adapt the command to your specifications by replacing **7.4** with your PHP version and **example.com** with your domain name.
 
