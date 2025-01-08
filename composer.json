@@ -26,7 +26,7 @@
     "require": {
         "php": "~8.2.0 || ~8.3.0",
         "laminas/laminas-cli": "^1.4.0",
-        "laminas/laminas-servicemanager": "^3.11.1"
+        "laminas/laminas-servicemanager": "^3.11.1 || ^4.0"
     },
     "autoload": {
         "psr-4": {
@@ -47,7 +47,8 @@
     "scripts": {
         "check": [
             "@cs-check",
-            "@test"
+            "@test",
+            "@static-analysis"
         ],
         "cs-check": "phpcs",
         "cs-fix": "phpcbf",
