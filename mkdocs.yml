@@ -16,7 +16,7 @@ nav:
       - Usage: v3/usage.md
       - "Setting Up As Cronjob": v3/setting-up-as-cronjob.md
 site_name: dot-cli
-site_description: "DotKernel's component to build console applications"
+site_description: "Dotkernel's component to build console applications"
 repo_url: "https://github.com/dotkernel/dot-cli"
 plugins:
   - search

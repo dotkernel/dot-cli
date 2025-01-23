@@ -6,9 +6,11 @@ If a command was force stopped, locate the lock file in the configured directory
 
 ## Configuration
 
-Inside `config/autoload/cli.global.php` under the `FileLockerInterface::class` key the file locker can be disabled and the location of the lock files can be changed
+Inside `config/autoload/cli.global.php` under the `FileLockerInterface::class` key the file locker can be disabled and the location of the lock files can be changed.
 
-    FileLockerInterface::class => [
-        'enabled' => true,
-        'dirPath' => getcwd() . '/data/lock',
-    ],
+```php
+FileLockerInterface::class => [
+    'enabled' => true,
+    'dirPath' => getcwd() . '/data/lock',
+],
+```

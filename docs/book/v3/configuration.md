@@ -4,7 +4,9 @@
 
 After installation, register `dot-cli` in your project by adding the below line to your configuration aggregator (usually: `config/config.php`):
 
-      Dot\Cli\ConfigProvider::class,
+```shell
+Dot\Cli\ConfigProvider::class,
+```
 
 ## Copy bootstrap file
 
@@ -16,7 +18,9 @@ This is the bootstrap file you will use to execute your commands with.
 Locate in this package the following file `config/autoload/cli.global.php` then copy it to your application's `config/autoload/` directory.
 This is the config file you will add your commands under the `commands` key, as in the following example:
 
-        'commands' => [
-            DemoCommand::getDefaultName()     => DemoCommand::class,
-            ExampleCommand::getDefaultName()  => ExampleCommand::class,
-        ],
+```php
+'commands' => [
+    DemoCommand::getDefaultName()    => DemoCommand::class,
+    ExampleCommand::getDefaultName() => ExampleCommand::class,
+],
+```
