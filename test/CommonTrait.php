@@ -37,7 +37,7 @@ trait CommonTrait
         return [
             'dot_cli'                  => [
                 'version'  => '1.0.0',
-                'name'     => 'DotKernel CLI',
+                'name'     => 'Dotkernel CLI',
                 'commands' => [
                     'test' => 'test',
                 ],

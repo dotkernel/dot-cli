@@ -8,7 +8,7 @@ use Dot\Cli\FileLockerInterface;
 return [
     'dot_cli'                  => [
         'version'  => '1.0.0',
-        'name'     => 'DotKernel CLI',
+        'name'     => 'Dotkernel CLI',
         'commands' => [
             DemoCommand::getDefaultName() => DemoCommand::class,
         ],

@@ -4,7 +4,7 @@
 > dot-cli is a wrapper on top of [laminas-cli](https://github.com/laminas/laminas-cli)
 
 ![OSS Lifecycle](https://img.shields.io/osslifecycle/dotkernel/dot-cli)
-![PHP from Packagist (specify version)](https://img.shields.io/packagist/php-v/dotkernel/dot-cli/3.7.0)
+![PHP from Packagist (specify version)](https://img.shields.io/packagist/php-v/dotkernel/dot-cli/3.8.0)
 
 [![GitHub issues](https://img.shields.io/github/issues/dotkernel/dot-cli)](https://github.com/dotkernel/dot-cli/issues)
 [![GitHub forks](https://img.shields.io/github/forks/dotkernel/dot-cli)](https://github.com/dotkernel/dot-cli/network)
@@ -14,13 +14,13 @@
 [![Build Static](https://github.com/dotkernel/dot-cli/actions/workflows/continuous-integration.yml/badge.svg?branch=3.0)](https://github.com/dotkernel/dot-cli/actions/workflows/continuous-integration.yml)
 [![codecov](https://codecov.io/gh/dotkernel/dot-cli/graph/badge.svg?token=0DFCK2GUBT)](https://codecov.io/gh/dotkernel/dot-cli)
 
-DotKernel component to build console applications based on [laminas-cli](https://github.com/laminas/laminas-cli).
+Dotkernel component to build console applications based on [laminas-cli](https://github.com/laminas/laminas-cli).
 
 ## Requirements
 
-- PHP >= 8.2
-- laminas/laminas-servicemanager >= 3.11 || >= 4.0,
-- laminas/laminas-cli >= 1.4
+- **PHP**: 8.2, 8.3 or 8.4
+- **laminas/laminas-servicemanager**: >= 3.11 || >= 4.0,
+- **laminas/laminas-cli**: >= 1.4
 
 ## Setup
 
@@ -61,25 +61,25 @@ php ./bin/cli.php
 The output should look similar to this, containing information on how to start using dot-cli:
 
 ```text
-    DotKernel CLI 1.0.0
-    
-    Usage:
-      command [options] [arguments]
-    
-    Options:
-      -h, --help            Display help for the given command. When no command is given display help for the list command
-      -q, --quiet           Do not output any message
-      -V, --version         Display this application version
-          --ansi            Force ANSI output
-          --no-ansi         Disable ANSI output
-      -n, --no-interaction  Do not ask any interactive question
-      -v|vv|vvv, --verbose  Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
-    
-    Available commands:
-      help          Display help for a command
-      list          List commands
-     demo
-      demo:command  Demo command description.
+Dotkernel CLI 1.0.0
+
+Usage:
+  command [options] [arguments]
+
+Options:
+  -h, --help            Display help for the given command. When no command is given display help for the list command
+  -q, --quiet           Do not output any message
+  -V, --version         Display this application version
+      --ansi            Force ANSI output
+      --no-ansi         Disable ANSI output
+  -n, --no-interaction  Do not ask any interactive question
+  -v|vv|vvv, --verbose  Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+
+Available commands:
+  help          Display help for a command
+  list          List commands
+ demo
+  demo:command  Demo command description.
 ```
 
 As shown in `config/autoload/cli.global.php`, dot-cli includes a demo command `demo:command` that will help you understand the basics of creating a new command.
