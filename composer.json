@@ -8,8 +8,7 @@
         "cli",
         "console",
         "dotkernel",
-        "laminas",
-        "mezzio"
+        "laminas"
     ],
     "authors": [
         {
@@ -34,10 +33,10 @@
         }
     },
     "require-dev": {
-        "laminas/laminas-coding-standard": "^2.5",
+        "laminas/laminas-coding-standard": "^3.0",
         "mikey179/vfsstream": "^1.6.7",
         "phpunit/phpunit": "^10.2",
-        "vimeo/psalm": "^5.13"
+        "vimeo/psalm": "^6.0"
     },
     "autoload-dev": {
         "psr-4": {
