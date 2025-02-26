@@ -5,6 +5,10 @@
 
 Dotkernel component to build console applications based on [laminas-cli](https://github.com/laminas/laminas-cli).
 
+## Documentation
+
+Documentation is available at: https://docs.dotkernel.org/dot-cli/.
+
 ## Badges
 
 ![OSS Lifecycle](https://img.shields.io/osslifecycle/dotkernel/dot-cli)
