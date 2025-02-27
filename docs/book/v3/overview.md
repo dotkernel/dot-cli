@@ -1,5 +1,7 @@
 # Overview
 
+Dotkernel component to build console applications based on [laminas-cli](https://github.com/laminas/laminas-cli).
+
 > dot-cli is a wrapper on top of [laminas-cli](https://github.com/laminas/laminas-cli)
 
 ## Badges

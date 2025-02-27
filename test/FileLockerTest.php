@@ -32,28 +32,28 @@ class FileLockerTest extends TestCase
         $fileLocker = new FileLocker();
         $this->assertFalse($fileLocker->isEnabled());
         $fileLocker->enable();
-        $this->assertContainsOnlyInstancesOf(FileLocker::class, [$fileLocker]);
+        $this->assertSame(FileLocker::class, $fileLocker::class);
         $this->assertTrue($fileLocker->isEnabled());
         $fileLocker->disable();
-        $this->assertContainsOnlyInstancesOf(FileLocker::class, [$fileLocker]);
+        $this->assertSame(FileLocker::class, $fileLocker::class);
         $this->assertFalse($fileLocker->isEnabled());
         $fileLocker->setEnabled(true);
-        $this->assertContainsOnlyInstancesOf(FileLocker::class, [$fileLocker]);
+        $this->assertSame(FileLocker::class, $fileLocker::class);
         $this->assertTrue($fileLocker->isEnabled());
         $fileLocker->setEnabled(false);
-        $this->assertContainsOnlyInstancesOf(FileLocker::class, [$fileLocker]);
+        $this->assertSame(FileLocker::class, $fileLocker::class);
         $this->assertFalse($fileLocker->isEnabled());
         $this->assertNull($fileLocker->getDirPath());
         $fileLocker->setDirPath('test');
-        $this->assertContainsOnlyInstancesOf(FileLocker::class, [$fileLocker]);
+        $this->assertSame(FileLocker::class, $fileLocker::class);
         $this->assertSame('test', $fileLocker->getDirPath());
         $this->assertNull($fileLocker->getCommandName());
         $fileLocker->setCommandName('test');
-        $this->assertContainsOnlyInstancesOf(FileLocker::class, [$fileLocker]);
+        $this->assertSame(FileLocker::class, $fileLocker::class);
         $this->assertSame('test', $fileLocker->getCommandName());
         $this->assertNull($fileLocker->getLockFile());
         $fileLocker->setLockFile('test');
-        $this->assertContainsOnlyInstancesOf(FileLocker::class, [$fileLocker]);
+        $this->assertSame(FileLocker::class, $fileLocker::class);
         $this->assertSame('test', $fileLocker->getLockFile());
         $this->assertSame('test/command-test.lock', $fileLocker->getLockFilePath());
     }
@@ -65,7 +65,7 @@ class FileLockerTest extends TestCase
         $fileLocker = new FileLocker(true, $config['dirPath'], 'test');
         $this->assertNull($fileLocker->getLockFile());
         $fileLocker->initLockFile();
-        $this->assertContainsOnlyInstancesOf(FileLocker::class, [$fileLocker]);
+        $this->assertSame(FileLocker::class, $fileLocker::class);
         $this->assertIsResource($fileLocker->getLockFile());
     }
 
@@ -79,7 +79,7 @@ class FileLockerTest extends TestCase
         $fileLocker = new FileLocker(false, $config['dirPath'], 'test');
         $this->assertNull($fileLocker->getLockFile());
         $fileLocker->lock();
-        $this->assertContainsOnlyInstancesOf(FileLocker::class, [$fileLocker]);
+        $this->assertSame(FileLocker::class, $fileLocker::class);
         $this->assertNull($fileLocker->getLockFile());
     }
 
@@ -93,7 +93,7 @@ class FileLockerTest extends TestCase
         $fileLocker = new FileLocker(true, $config['dirPath']);
         $this->assertNull($fileLocker->getLockFile());
         $fileLocker->lock();
-        $this->assertContainsOnlyInstancesOf(FileLocker::class, [$fileLocker]);
+        $this->assertSame(FileLocker::class, $fileLocker::class);
         $this->assertNull($fileLocker->getLockFile());
     }
 
@@ -107,7 +107,7 @@ class FileLockerTest extends TestCase
         $fileLocker = new FileLocker(true, $config['dirPath'], 'test');
         $this->assertNull($fileLocker->getLockFile());
         $fileLocker->lock();
-        $this->assertContainsOnlyInstancesOf(FileLocker::class, [$fileLocker]);
+        $this->assertSame(FileLocker::class, $fileLocker::class);
         $this->assertIsResource($fileLocker->getLockFile());
         $this->assertFileExists($fileLocker->getLockFilePath());
     }
@@ -119,7 +119,7 @@ class FileLockerTest extends TestCase
         $fileLocker = new FileLocker(false, $config['dirPath'], 'test');
         $this->assertNull($fileLocker->getLockFile());
         $fileLocker->unlock();
-        $this->assertContainsOnlyInstancesOf(FileLocker::class, [$fileLocker]);
+        $this->assertSame(FileLocker::class, $fileLocker::class);
         $this->assertNull($fileLocker->getLockFile());
     }
 
@@ -130,7 +130,7 @@ class FileLockerTest extends TestCase
         $fileLocker = new FileLocker(false, $config['dirPath']);
         $this->assertNull($fileLocker->getLockFile());
         $fileLocker->unlock();
-        $this->assertContainsOnlyInstancesOf(FileLocker::class, [$fileLocker]);
+        $this->assertSame(FileLocker::class, $fileLocker::class);
         $this->assertNull($fileLocker->getLockFile());
     }
 
@@ -141,7 +141,7 @@ class FileLockerTest extends TestCase
         $fileLocker = new FileLocker(true, $config['dirPath']);
         $this->assertNull($fileLocker->getLockFile());
         $fileLocker->unlock();
-        $this->assertContainsOnlyInstancesOf(FileLocker::class, [$fileLocker]);
+        $this->assertSame(FileLocker::class, $fileLocker::class);
         $this->assertNull($fileLocker->getLockFile());
     }
 
@@ -154,11 +154,11 @@ class FileLockerTest extends TestCase
 
         $fileLocker = new FileLocker(true, $config['dirPath'], 'test');
         $fileLocker->lock();
-        $this->assertContainsOnlyInstancesOf(FileLocker::class, [$fileLocker]);
+        $this->assertSame(FileLocker::class, $fileLocker::class);
         $this->assertIsResource($fileLocker->getLockFile());
         $this->assertFileExists($fileLocker->getLockFilePath());
         $fileLocker->unlock();
-        $this->assertContainsOnlyInstancesOf(FileLocker::class, [$fileLocker]);
+        $this->assertSame(FileLocker::class, $fileLocker::class);
         $this->assertFileIsReadable($fileLocker->getLockFilePath());
         $this->assertFileIsWritable($fileLocker->getLockFilePath());
     }
