@@ -20,7 +20,7 @@ class DemoCommandTest extends TestCase
     public function testWillCreateCommand(): void
     {
         $command = new DemoCommand();
-        $this->assertInstanceOf(DemoCommand::class, $command);
+        $this->assertContainsOnlyInstancesOf(DemoCommand::class, [$command]);
     }
 
     /**
