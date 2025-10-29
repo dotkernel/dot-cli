@@ -23,7 +23,7 @@
         }
     },
     "require": {
-        "php": "~8.2.0 || ~8.3.0 || ~8.4.0",
+        "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
         "laminas/laminas-cli": "^1.4.0",
         "laminas/laminas-servicemanager": "^3.11.1 || ^4.0"
     },
@@ -35,8 +35,8 @@
     "require-dev": {
         "laminas/laminas-coding-standard": "^3.0",
         "mikey179/vfsstream": "^1.6.7",
-        "phpstan/phpstan": "^2.1",
-        "phpstan/phpstan-phpunit": "^2.0",
+        "phpstan/phpstan": "^2.1.17",
+        "phpstan/phpstan-phpunit": "^2.0.6",
         "phpunit/phpunit": "^10.2"
     },
     "autoload-dev": {
@@ -52,7 +52,8 @@
         ],
         "cs-check": "phpcs",
         "cs-fix": "phpcbf",
+        "static-analysis": "phpstan analyse --memory-limit 1G",
         "test": "phpunit --colors=always",
-        "static-analysis": "phpstan analyse --memory-limit 1G"
+        "test-coverage": "phpunit --colors=always --coverage-clover clover.xml"
     }
 }

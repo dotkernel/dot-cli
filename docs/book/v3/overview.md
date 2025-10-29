@@ -1,13 +1,10 @@
 # Overview
 
-Dotkernel component to build console applications based on [laminas-cli](https://github.com/laminas/laminas-cli).
-
+> [!IMPORTANT]
 > dot-cli is a wrapper on top of [laminas-cli](https://github.com/laminas/laminas-cli)
 
-## Badges
-
 ![OSS Lifecycle](https://img.shields.io/osslifecycle/dotkernel/dot-cli)
-![PHP from Packagist (specify version)](https://img.shields.io/packagist/php-v/dotkernel/dot-cli/3.9.0)
+![PHP from Packagist (specify version)](https://img.shields.io/packagist/php-v/dotkernel/dot-cli/3.10.0)
 
 [![GitHub issues](https://img.shields.io/github/issues/dotkernel/dot-cli)](https://github.com/dotkernel/dot-cli/issues)
 [![GitHub forks](https://img.shields.io/github/forks/dotkernel/dot-cli)](https://github.com/dotkernel/dot-cli/network)
@@ -16,4 +13,3 @@ Dotkernel component to build console applications based on [laminas-cli](https:/
 
 [![Build Static](https://github.com/dotkernel/dot-cli/actions/workflows/continuous-integration.yml/badge.svg?branch=3.0)](https://github.com/dotkernel/dot-cli/actions/workflows/continuous-integration.yml)
 [![codecov](https://codecov.io/gh/dotkernel/dot-cli/graph/badge.svg?token=0DFCK2GUBT)](https://codecov.io/gh/dotkernel/dot-cli)
-[![PHPStan](https://github.com/dotkernel/dot-cli/actions/workflows/static-analysis.yml/badge.svg?branch=3.0)](https://github.com/dotkernel/dot-cli/actions/workflows/static-analysis.yml)

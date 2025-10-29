@@ -1,4 +1,4 @@
-# Setting up as cronjob
+# Setting up as a cronjob
 
 ```text
 *   *   *   *   *   php /var/www/vhosts/example.com/httpdocs/bin/cli.php demo:command -q

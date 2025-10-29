@@ -11,7 +11,7 @@ Documentation is available at: https://docs.dotkernel.org/dot-cli/.
 ## Badges
 
 ![OSS Lifecycle](https://img.shields.io/osslifecycle/dotkernel/dot-cli)
-![PHP from Packagist (specify version)](https://img.shields.io/packagist/php-v/dotkernel/dot-cli/3.9.0)
+![PHP from Packagist (specify version)](https://img.shields.io/packagist/php-v/dotkernel/dot-cli/3.10.0)
 
 [![GitHub issues](https://img.shields.io/github/issues/dotkernel/dot-cli)](https://github.com/dotkernel/dot-cli/issues)
 [![GitHub forks](https://img.shields.io/github/forks/dotkernel/dot-cli)](https://github.com/dotkernel/dot-cli/network)
@@ -24,7 +24,7 @@ Documentation is available at: https://docs.dotkernel.org/dot-cli/.
 
 ## Requirements
 
-- **PHP**: 8.2, 8.3 or 8.4
+- **PHP**: 8.2, 8.3, 8.4 or 8.5
 - **laminas/laminas-servicemanager**: >= 3.11 || >= 4.0,
 - **laminas/laminas-cli**: >= 1.4
 
@@ -91,7 +91,7 @@ Available commands:
 As shown in `config/autoload/cli.global.php`, dot-cli includes a demo command `demo:command` that will help you understand the basics of creating a new command.
 For more information, see [laminas-cli documentation](https://docs.laminas.dev/laminas-cli/).
 
-## Setting up as cronjob
+## Setting up as a cronjob
 
 ```text
 *   *   *   *   *   /opt/plesk/php/7.4/bin/php /var/www/vhosts/example.com/httpdocs/bin/cli.php demo:command -q
