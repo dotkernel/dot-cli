@@ -1,7 +1,14 @@
 # dot-cli
 
-> [!IMPORTANT]
+Dotkernel component to build console applications based on [laminas-cli](https://github.com/laminas/laminas-cli).
+
 > dot-cli is a wrapper on top of [laminas-cli](https://github.com/laminas/laminas-cli)
+
+## Documentation
+
+Documentation is available at: https://docs.dotkernel.org/dot-cli/.
+
+## Badges
 
 ![OSS Lifecycle](https://img.shields.io/osslifecycle/dotkernel/dot-cli)
 ![PHP from Packagist (specify version)](https://img.shields.io/packagist/php-v/dotkernel/dot-cli/3.10.0)
@@ -13,8 +20,7 @@
 
 [![Build Static](https://github.com/dotkernel/dot-cli/actions/workflows/continuous-integration.yml/badge.svg?branch=3.0)](https://github.com/dotkernel/dot-cli/actions/workflows/continuous-integration.yml)
 [![codecov](https://codecov.io/gh/dotkernel/dot-cli/graph/badge.svg?token=0DFCK2GUBT)](https://codecov.io/gh/dotkernel/dot-cli)
-
-Dotkernel component to build console applications based on [laminas-cli](https://github.com/laminas/laminas-cli).
+[![PHPStan](https://github.com/dotkernel/dot-cli/actions/workflows/static-analysis.yml/badge.svg?branch=3.0)](https://github.com/dotkernel/dot-cli/actions/workflows/static-analysis.yml)
 
 ## Requirements
 
