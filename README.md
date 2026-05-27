@@ -11,7 +11,7 @@ Documentation is available at: https://docs.dotkernel.org/dot-cli/.
 ## Badges
 
 ![OSS Lifecycle](https://img.shields.io/osslifecycle/dotkernel/dot-cli)
-![PHP from Packagist (specify version)](https://img.shields.io/packagist/php-v/dotkernel/dot-cli/3.11.0)
+![PHP from Packagist (specify version)](https://img.shields.io/packagist/php-v/dotkernel/dot-cli/3.11.1)
 
 [![GitHub issues](https://img.shields.io/github/issues/dotkernel/dot-cli)](https://github.com/dotkernel/dot-cli/issues)
 [![GitHub forks](https://img.shields.io/github/forks/dotkernel/dot-cli)](https://github.com/dotkernel/dot-cli/network)
@@ -26,7 +26,7 @@ Documentation is available at: https://docs.dotkernel.org/dot-cli/.
 
 - **PHP**: 8.2, 8.3, 8.4 or 8.5
 - **laminas/laminas-servicemanager**: >= 3.11 || >= 4.0,
-- **laminas/laminas-cli**: >= 1.4
+- **laminas/laminas-cli**: >= 1.15
 
 ## Setup
 
