@@ -40,6 +40,9 @@
         "phpstan/phpstan-phpunit": "^2.0.6",
         "phpunit/phpunit": "^12"
     },
+    "conflict": {
+        "symfony/event-dispatcher-contracts": "<2.5.3 || >=3.0,<3.5"
+    },
     "autoload-dev": {
         "psr-4": {
             "DotTest\\Cli\\": "test/"
