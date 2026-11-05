@@ -10,7 +10,7 @@ return [
         'version'  => '1.0.0',
         'name'     => 'Dotkernel CLI',
         'commands' => [
-            DemoCommand::getDefaultName() => DemoCommand::class,
+            'demo:command' => DemoCommand::class,
         ],
     ],
     FileLockerInterface::class => [
