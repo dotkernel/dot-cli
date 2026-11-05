@@ -5,37 +5,25 @@ declare(strict_types=1);
 namespace DotTest\Cli\Command;
 
 use Dot\Cli\Command\DemoCommand;
-use DotTest\Cli\CommonTrait;
 use PHPUnit\Framework\TestCase;
-use ReflectionException;
-use ReflectionMethod;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\ArgvInput;
-use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\Console\Tester\CommandTester;
 
 class DemoCommandTest extends TestCase
 {
-    use CommonTrait;
-
-    public function testWillCreateCommand(): void
+    public function testNameAndDescriptionComeFromTheAttribute(): void
     {
         $command = new DemoCommand();
-        $this->assertContainsOnlyInstancesOf(DemoCommand::class, [$command]);
+
+        $this->assertSame('demo:command', $command->getName());
+        $this->assertSame('Demo command description.', $command->getDescription());
     }
 
-    /**
-     * @throws ReflectionException
-     */
     public function testCommandWillExecute(): void
     {
-        $command    = new DemoCommand();
-        $reflection = new ReflectionMethod(DemoCommand::class, 'execute');
+        $tester = new CommandTester(new DemoCommand());
 
-        $result = $reflection->invoke(
-            $command,
-            new ArgvInput(),
-            new BufferedOutput()
-        );
-        $this->assertSame($result, Command::SUCCESS);
+        $this->assertSame(Command::SUCCESS, $tester->execute([]));
+        $this->assertSame('', $tester->getDisplay());
     }
 }
