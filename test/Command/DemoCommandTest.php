@@ -11,7 +11,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 class DemoCommandTest extends TestCase
 {
-    public function testNameAndDescriptionComeFromTheAttribute(): void
+    public function testHasNameAndDescription(): void
     {
         $command = new DemoCommand();
 

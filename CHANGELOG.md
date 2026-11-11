@@ -19,6 +19,7 @@ Dates before 4.0.0 are the commit dates of the tagged commits.
 - `ApplicationFactory::__invoke()` returns `Dot\Cli\Application`.
 - The `MESSAGE_*` constants are typed (`public const string`).
 - `config/autoload/cli.global.php` uses the command name as the key instead of `DemoCommand::getDefaultName()`, which Symfony Console 8 removed.
+- `DemoCommand::$defaultName` is typed as `string`. `DemoCommand` keeps it and `configure()` as a demo of extending a command; Symfony Console reads the name and description from the `#[AsCommand]` attribute.
 - Development tooling: PHPUnit 12 with strict `failOn*` flags, PHPStan level 8, GitHub Actions run PHP 8.3 to 8.6 with `actions/checkout@v7`, `actions/cache@v6` and `codecov/codecov-action@v7`, and the Laminas backward-compatibility check is disabled for this major version.
 - Documentation for 4.0 is available in `docs/book/v4`, including an upgrade guide from 3.x.
 
@@ -37,7 +38,6 @@ Dates before 4.0.0 are the commit dates of the tagged commits.
 
 - PHP 8.2 support.
 - `laminas/laminas-servicemanager` as a requirement. dot-cli only uses PSR-11; applications that use Laminas Service Manager require it themselves.
-- `DemoCommand::$defaultName` and `DemoCommand::configure()`. The name and description come from the `#[AsCommand]` attribute.
 - `mikey179/vfsstream` as a development requirement. Lock tests use a real temporary directory.
 
 ### Fixed

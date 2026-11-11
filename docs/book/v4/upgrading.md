@@ -9,7 +9,7 @@ Most applications only need to update the `commands` keys in `config/autoload/cl
 | --- | --- | --- |
 | PHP 8.2 is no longer supported | Composer refuses to install 4.0 | Use PHP 8.3 or newer, or stay on 3.x |
 | `laminas/laminas-servicemanager` is no longer required | `Class "Laminas\ServiceManager\ServiceManager" not found` if your application relied on dot-cli to install it | Run `composer require laminas/laminas-servicemanager` in your application |
-| `DemoCommand::$defaultName` and `DemoCommand::configure()` were removed | A config key such as `DemoCommand::getDefaultName()` fails with `Call to undefined method` on Symfony Console 8 | Use the command name as the key, see [below](#command-keys) |
+| The shipped config no longer uses `DemoCommand::getDefaultName()` as a key | A config key such as `DemoCommand::getDefaultName()` fails with `Call to undefined method` on Symfony Console 8 | Use the command name as the key, see [below](#command-keys) |
 | The event dispatcher service key is now `Laminas\Cli\SymfonyEventDispatcher` | None yet: the old key still works, but it is deprecated | Rename the service key, see [below](#event-dispatcher) |
 | A service under the event dispatcher key must implement `Symfony\Component\EventDispatcher\EventDispatcherInterface` | `Dot\Cli\Exception\InvalidConfigException` when the application is created | Register a Symfony event dispatcher under that key |
 | Aliases and abbreviations of a command share its lock | `demo:com` or an alias is rejected while `demo:command` runs | This is intended. Give commands that must run in parallel their own names |
@@ -38,7 +38,9 @@ After:
 ],
 ```
 
-If one of your own commands still sets `protected static $defaultName`, move the name to the `#[AsCommand]` attribute and remove the property.
+If one of your own commands still sets `protected static $defaultName`, move the name to the `#[AsCommand]` attribute.
+Symfony Console 7.4 and 8 do not read the property, so it no longer names the command.
+`DemoCommand` keeps it, typed as `string`, together with `configure()`, only to demonstrate both, see [Usage](usage.md).
 
 ## Event dispatcher
 

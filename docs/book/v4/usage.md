@@ -1,7 +1,12 @@
 # Usage
 
 Use `src/Command/DemoCommand.php` as an example when creating a new command.
-Set the name and description in the `#[AsCommand]` attribute: the command needs no `$defaultName` property and no `configure()` call to set them.
+Set the name and description in the `#[AsCommand]` attribute: Symfony Console reads them from there, so a command needs neither a `$defaultName` property nor a `configure()` method to set them.
+
+`DemoCommand` also implements `configure()` to show where a command can be extended by chaining methods, for example `setHelp()`, `addArgument()` and `addOption()`.
+For the demo, its `configure()` sets the same name and description as the attribute.
+Values set in `configure()` override the attribute, so if you keep both in your own command, keep them identical.
+Symfony Console 7.4 and 8 do not read the `$defaultName` property: it is only there for the demo.
 
 ```php
 <?php
