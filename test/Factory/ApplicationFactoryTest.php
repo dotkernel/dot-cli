@@ -19,6 +19,8 @@ use stdClass;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
+use function sprintf;
+
 class ApplicationFactoryTest extends TestCase
 {
     use CommonTrait;
@@ -118,7 +120,9 @@ class ApplicationFactoryTest extends TestCase
         $container = $this->createContainer()->set(ApplicationFactory::EVENT_DISPATCHER, new stdClass());
 
         $this->expectException(InvalidConfigException::class);
-        $this->expectExceptionMessage(InvalidConfigException::MESSAGE_INVALID_EVENT_DISPATCHER);
+        $this->expectExceptionMessage(
+            sprintf(InvalidConfigException::MESSAGE_INVALID_EVENT_DISPATCHER, EventDispatcherInterface::class)
+        );
 
         (new ApplicationFactory())($container);
     }
