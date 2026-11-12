@@ -5,142 +5,142 @@ declare(strict_types=1);
 namespace DotTest\Cli\Factory;
 
 use Dot\Cli\Application;
+use Dot\Cli\Exception\InvalidConfigException;
 use Dot\Cli\Factory\ApplicationFactory;
 use Dot\Cli\Factory\FileLockerFactory;
+use Dot\Cli\FileLocker;
 use Dot\Cli\FileLockerInterface;
 use DotTest\Cli\CommonTrait;
-use PHPUnit\Framework\MockObject\Exception;
+use DotTest\Cli\Fixture\InMemoryContainer;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\ContainerInterface;
-use Psr\Container\NotFoundExceptionInterface;
+use ReflectionProperty;
+use stdClass;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
+use function sprintf;
 
 class ApplicationFactoryTest extends TestCase
 {
     use CommonTrait;
 
-    /**
-     * @throws Exception
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     */
     public function testWillNotCreateApplicationWithoutConfig(): void
     {
-        $container = $this->createMock(ContainerInterface::class);
-
-        $container->expects($this->once())
-            ->method('has')
-            ->with('config')
-            ->willReturn(false);
-
-        $this->expectException(\Exception::class);
+        $this->expectException(InvalidConfigException::class);
         $this->expectExceptionMessage(ApplicationFactory::MESSAGE_MISSING_CONFIG);
-        (new ApplicationFactory())($container);
+
+        (new ApplicationFactory())(new InMemoryContainer());
     }
 
     /**
-     * @throws Exception
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
+     * @return iterable<string, array{mixed, string}>
      */
-    public function testWillNotCreateApplicationWithoutPackageConfig(): void
+    public static function invalidConfigProvider(): iterable
     {
-        $container = $this->createMock(ContainerInterface::class);
-
-        $container->expects($this->once())
-            ->method('has')
-            ->with('config')
-            ->willReturn(true);
-
-        $container->expects($this->once())
-            ->method('get')
-            ->with('config')
-            ->willReturn([
-                'test',
-            ]);
-
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage(ApplicationFactory::MESSAGE_MISSING_PACKAGE_CONFIG);
-        (new ApplicationFactory())($container);
+        yield 'config is not an array' => ['test', ApplicationFactory::MESSAGE_MISSING_PACKAGE_CONFIG];
+        yield 'missing dot_cli' => [['test'], ApplicationFactory::MESSAGE_MISSING_PACKAGE_CONFIG];
+        yield 'empty dot_cli' => [['dot_cli' => []], ApplicationFactory::MESSAGE_MISSING_PACKAGE_CONFIG];
+        yield 'missing commands' => [['dot_cli' => ['test']], ApplicationFactory::MESSAGE_MISSING_CONFIG_COMMANDS];
+        yield 'empty commands' => [
+            ['dot_cli' => ['commands' => []]],
+            ApplicationFactory::MESSAGE_MISSING_CONFIG_COMMANDS,
+        ];
     }
 
-    /**
-     * @throws Exception
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     */
-    public function testWillNotCreateApplicationWithoutConfigCommands(): void
+    #[DataProvider('invalidConfigProvider')]
+    public function testWillNotCreateApplicationWithInvalidConfig(mixed $config, string $message): void
     {
-        $container = $this->createMock(ContainerInterface::class);
+        $this->expectException(InvalidConfigException::class);
+        $this->expectExceptionMessage($message);
 
-        $container->expects($this->once())
-            ->method('has')
-            ->with('config')
-            ->willReturn(true);
-
-        $container->expects($this->once())
-            ->method('get')
-            ->with('config')
-            ->willReturn([
-                'dot_cli' => [
-                    'test',
-                ],
-            ]);
-
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage(ApplicationFactory::MESSAGE_MISSING_CONFIG_COMMANDS);
-        (new ApplicationFactory())($container);
+        (new ApplicationFactory())(new InMemoryContainer(['config' => $config]));
     }
 
-    /**
-     * @throws Exception
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     */
     public function testWillNotCreateApplicationWithoutFileLockerService(): void
     {
-        $container = $this->createMock(ContainerInterface::class);
-
-        $container->method('has')->willReturnMap([
-            ['config', true],
-            ['Dot\Cli\Factory\SymfonyEventDispatcher', false],
-            [FileLockerInterface::class, false],
-        ]);
-
-        $container->expects($this->once())
-            ->method('get')
-            ->with('config')
-            ->willReturn($this->getConfig());
-
-        $this->expectException(\Exception::class);
+        $this->expectException(InvalidConfigException::class);
         $this->expectExceptionMessage(FileLockerFactory::MESSAGE_MISSING_FILE_LOCKER);
+
+        (new ApplicationFactory())(new InMemoryContainer(['config' => $this->getConfig()]));
+    }
+
+    public function testWillNotCreateApplicationWithInvalidFileLockerService(): void
+    {
+        $this->expectException(InvalidConfigException::class);
+        $this->expectExceptionMessage(FileLockerFactory::MESSAGE_MISSING_FILE_LOCKER);
+
+        (new ApplicationFactory())($this->createContainer()->set(FileLockerInterface::class, new stdClass()));
+    }
+
+    public function testWillCreateApplicationWithDefaultDispatcher(): void
+    {
+        $application = (new ApplicationFactory())($this->createContainer());
+
+        $this->assertSame('Dotkernel CLI', $application->getName());
+        $this->assertSame('1.0.0', $application->getVersion());
+        $this->assertFalse($application->isAutoExitEnabled());
+        $this->assertInstanceOf(EventDispatcher::class, $this->getDispatcher($application));
+    }
+
+    public function testUsesTheLaminasDispatcherKey(): void
+    {
+        $dispatcher = new EventDispatcher();
+        $container  = $this->createContainer()->set('Laminas\Cli\SymfonyEventDispatcher', $dispatcher);
+
+        $application = (new ApplicationFactory())($container);
+
+        $this->assertSame($dispatcher, $this->getDispatcher($application));
+    }
+
+    public function testUsesTheLegacyDispatcherKey(): void
+    {
+        $dispatcher = new EventDispatcher();
+        $container  = $this->createContainer()->set('Dot\Cli\Factory\SymfonyEventDispatcher', $dispatcher);
+
+        $application = (new ApplicationFactory())($container);
+
+        $this->assertSame($dispatcher, $this->getDispatcher($application));
+    }
+
+    public function testLaminasDispatcherKeyWinsOverLegacyKey(): void
+    {
+        $dispatcher = new EventDispatcher();
+        $container  = $this->createContainer()
+            ->set(ApplicationFactory::EVENT_DISPATCHER, $dispatcher)
+            ->set(ApplicationFactory::LEGACY_EVENT_DISPATCHER, new EventDispatcher());
+
+        $application = (new ApplicationFactory())($container);
+
+        $this->assertSame($dispatcher, $this->getDispatcher($application));
+    }
+
+    public function testRejectsNonDispatcherService(): void
+    {
+        $container = $this->createContainer()->set(ApplicationFactory::EVENT_DISPATCHER, new stdClass());
+
+        $this->expectException(InvalidConfigException::class);
+        $this->expectExceptionMessage(
+            sprintf(InvalidConfigException::MESSAGE_INVALID_EVENT_DISPATCHER, EventDispatcherInterface::class)
+        );
+
         (new ApplicationFactory())($container);
     }
 
-    /**
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     * @throws Exception
-     */
-    public function testWillCreateApplication(): void
+    private function createContainer(): InMemoryContainer
     {
-        $container  = $this->createMock(ContainerInterface::class);
-        $fileLocker = $this->createMock(FileLockerInterface::class);
-
-        $container->method('has')->willReturnMap([
-            ['config', true],
-            ['Dot\Cli\Factory\SymfonyEventDispatcher', true],
-            [FileLockerInterface::class, true],
+        return new InMemoryContainer([
+            'config'                   => $this->getConfig(),
+            FileLockerInterface::class => new FileLocker(),
         ]);
+    }
 
-        $container->method('get')->willReturnMap([
-            ['config', $this->getConfig()],
-            ['Dot\Cli\Factory\SymfonyEventDispatcher', new EventDispatcher()],
-            [FileLockerInterface::class, $fileLocker],
-        ]);
+    private function getDispatcher(Application $application): EventDispatcherInterface
+    {
+        $dispatcher = (new ReflectionProperty(\Symfony\Component\Console\Application::class, 'dispatcher'))
+            ->getValue($application);
+        $this->assertInstanceOf(EventDispatcherInterface::class, $dispatcher);
 
-        $application = (new ApplicationFactory())($container);
-        $this->assertInstanceOf(Application::class, $application);
+        return $dispatcher;
     }
 }

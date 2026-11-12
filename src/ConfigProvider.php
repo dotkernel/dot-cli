@@ -9,6 +9,9 @@ use Dot\Cli\Factory\FileLockerFactory;
 
 class ConfigProvider
 {
+    /**
+     * @return array{dependencies: array<string, array<string, string>>}
+     */
     public function __invoke(): array
     {
         return [
@@ -16,6 +19,9 @@ class ConfigProvider
         ];
     }
 
+    /**
+     * @return array<string, array<string, string>>
+     */
     public function getDependencyConfig(): array
     {
         return [
