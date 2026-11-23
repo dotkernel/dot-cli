@@ -16,6 +16,7 @@ class DemoCommandTest extends TestCase
         $command = new DemoCommand();
 
         $this->assertSame('demo:command', $command->getName());
+        $this->assertSame(DemoCommand::DEFAULT_NAME, $command->getName());
         $this->assertSame('Demo command description.', $command->getDescription());
     }
 

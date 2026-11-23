@@ -1,12 +1,13 @@
 # Usage
 
 Use `src/Command/DemoCommand.php` as an example when creating a new command.
-Set the name and description in the `#[AsCommand]` attribute: Symfony Console reads them from there, so a command needs neither a `$defaultName` property nor a `configure()` method to set them.
+Set the name and description in the `#[AsCommand]` attribute: Symfony Console reads them from there, so a command does not need a `configure()` method to set them.
+Keep the name in a `DEFAULT_NAME` class constant, and use the constant in the attribute and in `config/autoload/cli.global.php`.
+Then the command name is written in one place only.
 
 `DemoCommand` also implements `configure()` to show where a command can be extended by chaining methods, for example `setHelp()`, `addArgument()` and `addOption()`.
 For the demo, its `configure()` sets the same name and description as the attribute.
 Values set in `configure()` override the attribute, so if you keep both in your own command, keep them identical.
-Symfony Console 7.4 and 8 do not read the `$defaultName` property: it is only there for the demo.
 
 ```php
 <?php
@@ -21,11 +22,13 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(
-    name: 'app:example',
+    name: ExampleCommand::DEFAULT_NAME,
     description: 'Example command description.',
 )]
 class ExampleCommand extends Command
 {
+    public const string DEFAULT_NAME = 'app:example';
+
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln('Hello from app:example');
@@ -39,7 +42,7 @@ Then register it in `config/autoload/cli.global.php`:
 
 ```php
 'commands' => [
-    'app:example' => App\Command\ExampleCommand::class,
+    App\Command\ExampleCommand::DEFAULT_NAME => App\Command\ExampleCommand::class,
 ],
 ```
 

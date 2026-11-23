@@ -9,6 +9,7 @@ Dates before 4.0.0 are the commit dates of the tagged commits.
 ### Changed
 
 - Minimum PHP version is now 8.3. Supported versions: 8.3, 8.4, 8.5 and 8.6.
+- `laminas/laminas-cli` is required as `^1.16.0`.
 - A command's lock now uses its resolved name, so aliases and abbreviations share one lock. Unknown commands are not locked.
 - Lock errors are written to the error output with quiet verbosity, so they are shown with `-q` (use `--silent` to hide them).
 - A missing or unwritable lock directory, or a lock file that cannot be opened, throws `Dot\Cli\Exception\RuntimeException` instead of a `TypeError`.
@@ -18,9 +19,9 @@ Dates before 4.0.0 are the commit dates of the tagged commits.
 - The factories throw `Dot\Cli\Exception\InvalidConfigException` (an `Exception` and a PSR-11 `ContainerExceptionInterface`) instead of `Exception`.
 - `ApplicationFactory::__invoke()` returns `Dot\Cli\Application`.
 - The `MESSAGE_*` constants are typed (`public const string`).
-- `config/autoload/cli.global.php` uses the command name as the key instead of `DemoCommand::getDefaultName()`, which Symfony Console 8 removed.
-- `DemoCommand::$defaultName` is typed as `string`. `DemoCommand` keeps it and `configure()` as a demo of extending a command; Symfony Console reads the name and description from the `#[AsCommand]` attribute.
-- Development tooling: PHPUnit 12 with strict `failOn*` flags, PHPStan level 8, GitHub Actions run PHP 8.3 to 8.6 with `actions/checkout@v7`, `actions/cache@v6` and `codecov/codecov-action@v7`, and the Laminas backward-compatibility check is disabled for this major version.
+- `config/autoload/cli.global.php` uses `DemoCommand::DEFAULT_NAME` as the key instead of `DemoCommand::getDefaultName()`, which Symfony Console 8 removed.
+- The `#[AsCommand]` attribute of `DemoCommand` reads its name from `DemoCommand::DEFAULT_NAME`. `DemoCommand` keeps `configure()` as a demo of extending a command.
+- Development tooling: PHPUnit 12 with strict `failOn*` flags, PHPStan level 8, GitHub Actions run PHP 8.3 to 8.6 with `actions/checkout@v7`, `actions/cache@v6` and `codecov/codecov-action@v7`.
 - Documentation for 4.0 is available in `docs/book/v4`, including an upgrade guide from 3.x.
 
 ### Added
@@ -28,6 +29,7 @@ Dates before 4.0.0 are the commit dates of the tagged commits.
 - `Dot\Cli\Exception\ExceptionInterface`, `Dot\Cli\Exception\RuntimeException` and `Dot\Cli\Exception\InvalidConfigException`.
 - `ApplicationFactory::EVENT_DISPATCHER` and `ApplicationFactory::LEGACY_EVENT_DISPATCHER`.
 - `psr/container`, `symfony/console` and `symfony/event-dispatcher` as direct requirements.
+- A conflict with `symfony/event-dispatcher-contracts` versions before 2.5.3 and from 3.0 to 3.4. In those versions, `EventDispatcherInterface::dispatch()` has an implicitly nullable parameter, which PHP 8.4 and newer report as deprecated.
 - Tests with a minimal PSR-11 container and a real temporary directory, covering lock contention, aliases, abbreviations, quiet output and the event dispatcher keys.
 
 ### Deprecated
@@ -38,6 +40,7 @@ Dates before 4.0.0 are the commit dates of the tagged commits.
 
 - PHP 8.2 support.
 - `laminas/laminas-servicemanager` as a requirement. dot-cli only uses PSR-11; applications that use Laminas Service Manager require it themselves.
+- `DemoCommand::$defaultName`. Use `DemoCommand::DEFAULT_NAME`.
 - `mikey179/vfsstream` as a development requirement. Lock tests use a real temporary directory.
 
 ### Fixed

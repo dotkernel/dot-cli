@@ -34,7 +34,7 @@ Upgrading from 3.x? Read the [upgrade guide](https://docs.dotkernel.org/dot-cli/
 ## Requirements
 
 - **PHP**: 8.3, 8.4, 8.5 or 8.6
-- **laminas/laminas-cli**: >= 1.15
+- **laminas/laminas-cli**: >= 1.16
 - **symfony/console** and **symfony/event-dispatcher**: 7.4 or 8.x
 - A PSR-11 container that reads `factories` and `aliases` configuration, for example `laminas/laminas-servicemanager` (require it in your application)
 
@@ -68,7 +68,7 @@ This is the config file you will add your commands to, using the command name as
 
 ```php
 'commands' => [
-    'demo:command' => Dot\Cli\Command\DemoCommand::class,
+    Dot\Cli\Command\DemoCommand::DEFAULT_NAME => Dot\Cli\Command\DemoCommand::class,
 ],
 ```
 

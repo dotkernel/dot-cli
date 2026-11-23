@@ -3,7 +3,7 @@
 ## Requirements
 
 - PHP 8.3, 8.4, 8.5 or 8.6
-- `laminas/laminas-cli` 1.15 or newer
+- `laminas/laminas-cli` 1.16 or newer
 - `symfony/console` and `symfony/event-dispatcher` 7.4 or 8.x
 - A PSR-11 container that reads `factories` and `aliases` configuration, for example `laminas/laminas-servicemanager`
 

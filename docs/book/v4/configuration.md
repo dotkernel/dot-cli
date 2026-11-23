@@ -20,12 +20,14 @@ Add your commands under the `commands` key, using the command name as the key an
 
 ```php
 'commands' => [
-    'demo:command'    => DemoCommand::class,
-    'example:command' => ExampleCommand::class,
+    DemoCommand::DEFAULT_NAME    => DemoCommand::class,
+    ExampleCommand::DEFAULT_NAME => ExampleCommand::class,
 ],
 ```
 
-Use the name from the command's `#[AsCommand]` attribute.
+The key must be the name from the command's `#[AsCommand]` attribute.
+Keep the name in a `DEFAULT_NAME` class constant and use it in both places, see [Usage](usage.md).
+A string such as `'demo:command'` also works.
 Do not use `DemoCommand::getDefaultName()`: Symfony Console 8 removed that method, and Symfony Console 7.4 reports it as deprecated.
 
 Command classes that are registered in the container are fetched from it.

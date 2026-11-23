@@ -1,7 +1,7 @@
 {
     "name": "dotkernel/dot-cli",
     "type": "library",
-    "description": "Dotkernel component for creating console applications based on laminas-cli",
+    "description": "Dotkernel component for creating console applications based on laminas-cli, for any PSR-11 container",
     "license": "MIT",
     "homepage": "https://github.com/dotkernel/dot-cli",
     "keywords": [
