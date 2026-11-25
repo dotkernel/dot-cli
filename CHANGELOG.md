@@ -12,7 +12,7 @@ Dates before 4.0.0 are the commit dates of the tagged commits.
 - `laminas/laminas-cli` is required as `^1.16.0`.
 - A command's lock now uses its resolved name, so aliases and abbreviations share one lock. Unknown commands are not locked.
 - Lock errors are written to the error output with quiet verbosity, so they are shown with `-q` (use `--silent` to hide them).
-- A missing or unwritable lock directory, or a lock file that cannot be opened, throws `Dot\Cli\Exception\RuntimeException` instead of a `TypeError`.
+- A missing or unwritable lock directory, or a lock file that cannot be opened, throws `Dot\Cli\Exception\RuntimeException` instead of a `TypeError`. When a lock file cannot be opened, the message includes the reason from the operating system, for example `Permission denied`.
 - `FileLocker::getLockFilePath()` throws `Dot\Cli\Exception\RuntimeException` when the directory or the command name is missing.
 - `FileLocker::unlock()` releases a held lock even after `disable()`, and does nothing when no lock is held.
 - The custom event dispatcher is read from the `Laminas\Cli\SymfonyEventDispatcher` service, the key laminas-cli uses, and must implement `Symfony\Component\EventDispatcher\EventDispatcherInterface`.

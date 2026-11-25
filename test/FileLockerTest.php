@@ -12,7 +12,9 @@ use function chmod;
 use function function_exists;
 use function mkdir;
 use function posix_geteuid;
+use function preg_quote;
 use function rmdir;
+use function sprintf;
 
 class FileLockerTest extends TestCase
 {
@@ -129,6 +131,44 @@ class FileLockerTest extends TestCase
             chmod($dir, 0775);
             rmdir($dir);
         }
+    }
+
+    public function testLockThrowsWithTheReasonWhenLockFileCannotBeOpened(): void
+    {
+        $fileLocker = new FileLocker(true, $this->tempDir, 'test');
+        $path       = $fileLocker->getLockFilePath();
+        mkdir($path);
+
+        try {
+            $fileLocker->lock();
+            $this->fail('Expected RuntimeException');
+        } catch (RuntimeException $exception) {
+            $this->assertMatchesRegularExpression(
+                '/^Unable to open the lock file "' . preg_quote($path, '/') . '": [^:]+\.$/',
+                $exception->getMessage()
+            );
+        } finally {
+            rmdir($path);
+        }
+
+        $this->assertNull($fileLocker->getLockFile());
+    }
+
+    public function testLockThrowsWhenInitLockFileSetsNoHandle(): void
+    {
+        $fileLocker = new class (true, $this->tempDir, 'test') extends FileLocker {
+            public function initLockFile(): self
+            {
+                return $this;
+            }
+        };
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage(
+            sprintf(RuntimeException::MESSAGE_CANNOT_OPEN_LOCK, $this->tempDir . '/command-test.lock')
+        );
+
+        $fileLocker->lock();
     }
 
     public function testWillNotLockWhenDisabled(): void

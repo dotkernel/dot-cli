@@ -12,6 +12,7 @@ class RuntimeException extends \RuntimeException implements ExceptionInterface
     public const string MESSAGE_CANNOT_ACQUIRE_LOCK = 'Unable to acquire the file lock "%s".';
     public const string MESSAGE_LOCK_DIR            = 'The lock directory "%s" does not exist or is not writable.';
     public const string MESSAGE_CANNOT_OPEN_LOCK    = 'Unable to open the lock file "%s".';
+    public const string MESSAGE_OPEN_LOCK_REASON    = 'Unable to open the lock file "%s": %s.';
     public const string MESSAGE_MISSING_LOCK_DATA   = 'The lock file path needs a lock directory and a command name.';
 
     public static function lockHeld(): self
@@ -29,9 +30,13 @@ class RuntimeException extends \RuntimeException implements ExceptionInterface
         return new self(sprintf(self::MESSAGE_LOCK_DIR, $dirPath));
     }
 
-    public static function cannotOpenLockFile(string $path): self
+    public static function cannotOpenLockFile(string $path, ?string $reason = null): self
     {
-        return new self(sprintf(self::MESSAGE_CANNOT_OPEN_LOCK, $path));
+        if ($reason === null || $reason === '') {
+            return new self(sprintf(self::MESSAGE_CANNOT_OPEN_LOCK, $path));
+        }
+
+        return new self(sprintf(self::MESSAGE_OPEN_LOCK_REASON, $path, $reason));
     }
 
     public static function missingLockFileData(): self

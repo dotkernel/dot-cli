@@ -25,6 +25,14 @@ class ExceptionTest extends TestCase
             RuntimeException::cannotOpenLockFile('/a.lock')->getMessage()
         );
         $this->assertSame(
+            'Unable to open the lock file "/a.lock".',
+            RuntimeException::cannotOpenLockFile('/a.lock', '')->getMessage()
+        );
+        $this->assertSame(
+            'Unable to open the lock file "/a.lock": Permission denied.',
+            RuntimeException::cannotOpenLockFile('/a.lock', 'Permission denied')->getMessage()
+        );
+        $this->assertSame(
             RuntimeException::MESSAGE_MISSING_LOCK_DATA,
             RuntimeException::missingLockFileData()->getMessage()
         );

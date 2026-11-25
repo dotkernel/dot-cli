@@ -12,9 +12,13 @@ use function fopen;
 use function is_dir;
 use function is_resource;
 use function is_writable;
+use function restore_error_handler;
 use function rtrim;
+use function set_error_handler;
 use function sprintf;
 use function str_replace;
+use function strrpos;
+use function substr;
 
 use const LOCK_EX;
 use const LOCK_NB;
@@ -38,9 +42,22 @@ class FileLocker implements FileLockerInterface
             throw RuntimeException::lockDirectoryNotWritable($dirPath);
         }
 
-        $handle = fopen($path, 'c');
+        $reason = null;
+        set_error_handler(static function (int $errno, string $message) use (&$reason): bool {
+            // The warning reads "fopen(<path>): Failed to open stream: <reason>". Keep only the reason.
+            $position = strrpos($message, ': ');
+            $reason   = $position === false ? $message : substr($message, $position + 2);
+
+            return true;
+        });
+        try {
+            $handle = fopen($path, 'c');
+        } finally {
+            restore_error_handler();
+        }
+
         if ($handle === false) {
-            throw RuntimeException::cannotOpenLockFile($path);
+            throw RuntimeException::cannotOpenLockFile($path, $reason);
         }
         $this->lockFile = $handle;
 
