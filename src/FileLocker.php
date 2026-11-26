@@ -4,14 +4,21 @@ declare(strict_types=1);
 
 namespace Dot\Cli;
 
-use Exception;
+use Dot\Cli\Exception\RuntimeException;
 
 use function fclose;
 use function flock;
 use function fopen;
+use function is_dir;
+use function is_resource;
+use function is_writable;
+use function restore_error_handler;
 use function rtrim;
+use function set_error_handler;
 use function sprintf;
 use function str_replace;
+use function strrpos;
+use function substr;
 
 use const LOCK_EX;
 use const LOCK_NB;
@@ -19,26 +26,40 @@ use const LOCK_UN;
 
 class FileLocker implements FileLockerInterface
 {
-    private bool $enabled;
-    private ?string $dirPath;
-    private ?string $commandName;
-    private mixed $lockFile;
-
     public function __construct(
-        bool $enabled = false,
-        ?string $dirPath = null,
-        ?string $commandName = null,
-        mixed $lockFile = null,
+        private bool $enabled = false,
+        private ?string $dirPath = null,
+        private ?string $commandName = null,
+        private mixed $lockFile = null,
     ) {
-        $this->enabled     = $enabled;
-        $this->dirPath     = $dirPath;
-        $this->commandName = $commandName;
-        $this->lockFile    = $lockFile;
     }
 
     public function initLockFile(): self
     {
-        $this->lockFile = fopen($this->getLockFilePath(), 'w+');
+        $path    = $this->getLockFilePath();
+        $dirPath = (string) $this->dirPath;
+        if (! is_dir($dirPath) || ! is_writable($dirPath)) {
+            throw RuntimeException::lockDirectoryNotWritable($dirPath);
+        }
+
+        $reason = null;
+        set_error_handler(static function (int $errno, string $message) use (&$reason): bool {
+            // The warning reads "fopen(<path>): Failed to open stream: <reason>". Keep only the reason.
+            $position = strrpos($message, ': ');
+            $reason   = $position === false ? $message : substr($message, $position + 2);
+
+            return true;
+        });
+        try {
+            $handle = fopen($path, 'c');
+        } finally {
+            restore_error_handler();
+        }
+
+        if ($handle === false) {
+            throw RuntimeException::cannotOpenLockFile($path, $reason);
+        }
+        $this->lockFile = $handle;
 
         return $this;
     }
@@ -76,9 +97,7 @@ class FileLocker implements FileLockerInterface
 
     public function setDirPath(?string $dirPath): self
     {
-        $dirPath       = rtrim($dirPath, '/');
-        $dirPath       = rtrim($dirPath, '\\');
-        $this->dirPath = $dirPath;
+        $this->dirPath = $dirPath === null ? null : rtrim($dirPath, '/\\');
 
         return $this;
     }
@@ -109,6 +128,10 @@ class FileLocker implements FileLockerInterface
 
     public function getLockFilePath(): string
     {
+        if ($this->dirPath === null || $this->commandName === null || $this->commandName === '') {
+            throw RuntimeException::missingLockFileData();
+        }
+
         return sprintf(
             '%s/command-%s.lock',
             $this->dirPath,
@@ -116,39 +139,40 @@ class FileLocker implements FileLockerInterface
         );
     }
 
-    /**
-     * @inheritDoc
-     */
     public function lock(): void
     {
-        if (! $this->enabled) {
+        if (! $this->enabled || $this->commandName === null || $this->commandName === '') {
             return;
         }
 
-        if (empty($this->commandName)) {
+        if (is_resource($this->lockFile)) {
             return;
         }
 
         $this->initLockFile();
+        $handle = $this->lockFile;
+        if (! is_resource($handle)) {
+            throw RuntimeException::cannotOpenLockFile($this->getLockFilePath());
+        }
 
-        if (! flock($this->lockFile, LOCK_EX | LOCK_NB, $wouldBlock)) {
-            if ($wouldBlock) {
-                throw new Exception('The file lock is being held by a different process');
-            }
+        if (! flock($handle, LOCK_EX | LOCK_NB, $wouldBlock)) {
+            fclose($handle);
+            $this->lockFile = null;
+
+            throw $wouldBlock
+                ? RuntimeException::lockHeld()
+                : RuntimeException::cannotAcquireLock($this->getLockFilePath());
         }
     }
 
     public function unlock(): void
     {
-        if (! $this->enabled) {
-            return;
-        }
-
-        if (empty($this->commandName)) {
+        if (! is_resource($this->lockFile)) {
             return;
         }
 
         flock($this->lockFile, LOCK_UN);
         fclose($this->lockFile);
+        $this->lockFile = null;
     }
 }

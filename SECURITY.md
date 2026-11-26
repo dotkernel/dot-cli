@@ -2,10 +2,11 @@
 
 ## Supported Versions
 
-| Version | Supported          | PHP Version                                                                                              |
-|---------|--------------------|----------------------------------------------------------------------------------------------------------|
-| 3.x     | :white_check_mark: | ![PHP from Packagist (specify version)](https://img.shields.io/packagist/php-v/dotkernel/dot-cli/3.11.1) |
-| <= 2.x  | :x:                |                                                                                                          |
+| Version | Supported                          | PHP Version                                                                                              |
+|---------|------------------------------------|----------------------------------------------------------------------------------------------------------|
+| 4.x     | :white_check_mark:                 | ![PHP from Packagist (specify version)](https://img.shields.io/packagist/php-v/dotkernel/dot-cli/4.0.0)  |
+| 3.x     | :white_check_mark: (security only) | ![PHP from Packagist (specify version)](https://img.shields.io/packagist/php-v/dotkernel/dot-cli/3.11.1) |
+| <= 2.x  | :x:                                |                                                                                                          |
 
 ## Reporting Potential Security Issues
 

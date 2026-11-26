@@ -4,142 +4,89 @@ declare(strict_types=1);
 
 namespace DotTest\Cli\Factory;
 
+use Dot\Cli\Exception\InvalidConfigException;
 use Dot\Cli\Factory\ApplicationFactory;
 use Dot\Cli\Factory\FileLockerFactory;
 use Dot\Cli\FileLocker;
 use Dot\Cli\FileLockerInterface;
 use DotTest\Cli\CommonTrait;
-use PHPUnit\Framework\MockObject\Exception;
+use DotTest\Cli\Fixture\InMemoryContainer;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\ContainerInterface;
-use Psr\Container\NotFoundExceptionInterface;
 
 class FileLockerFactoryTest extends TestCase
 {
     use CommonTrait;
 
-    /**
-     * @throws Exception
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     */
     public function testWillNotCreateServiceWithoutConfig(): void
     {
-        $container = $this->createMock(ContainerInterface::class);
-
-        $container->expects($this->once())
-            ->method('has')
-            ->with('config')
-            ->willReturn(false);
-
-        $this->expectException(\Exception::class);
+        $this->expectException(InvalidConfigException::class);
         $this->expectExceptionMessage(ApplicationFactory::MESSAGE_MISSING_CONFIG);
-        (new FileLockerFactory())($container);
+
+        (new FileLockerFactory())(new InMemoryContainer());
     }
 
     /**
-     * @throws Exception
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
+     * @return iterable<string, array{mixed, string}>
      */
-    public function testWillNotCreateServiceWithoutFileLockerConfig(): void
+    public static function invalidConfigProvider(): iterable
     {
-        $container = $this->createMock(ContainerInterface::class);
-
-        $container->expects($this->once())
-            ->method('has')
-            ->with('config')
-            ->willReturn(true);
-
-        $container->expects($this->once())
-            ->method('get')
-            ->with('config')
-            ->willReturn([
-                'test',
-            ]);
-
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage(FileLockerFactory::MESSAGE_MISSING_FILE_LOCKER_CONFIG);
-        (new FileLockerFactory())($container);
+        yield 'config is not an array' => ['test', FileLockerFactory::MESSAGE_MISSING_FILE_LOCKER_CONFIG];
+        yield 'missing locker config' => [['test'], FileLockerFactory::MESSAGE_MISSING_FILE_LOCKER_CONFIG];
+        yield 'empty locker config' => [
+            [FileLockerInterface::class => []],
+            FileLockerFactory::MESSAGE_MISSING_FILE_LOCKER_CONFIG,
+        ];
+        yield 'missing enabled' => [
+            [FileLockerInterface::class => ['dirPath' => 'test']],
+            FileLockerFactory::MESSAGE_MISSING_FILE_LOCKER_CONFIG_ENABLED,
+        ];
+        yield 'enabled is not a bool' => [
+            [FileLockerInterface::class => ['enabled' => 1, 'dirPath' => 'test']],
+            FileLockerFactory::MESSAGE_MISSING_FILE_LOCKER_CONFIG_ENABLED,
+        ];
+        yield 'missing dirPath' => [
+            [FileLockerInterface::class => ['enabled' => false]],
+            FileLockerFactory::MESSAGE_MISSING_FILE_LOCKER_CONFIG_DIR_PATH,
+        ];
+        yield 'empty dirPath' => [
+            [FileLockerInterface::class => ['enabled' => false, 'dirPath' => '']],
+            FileLockerFactory::MESSAGE_MISSING_FILE_LOCKER_CONFIG_DIR_PATH,
+        ];
     }
 
-    /**
-     * @throws Exception
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     */
-    public function testWillNotCreateServiceWithoutFileLockerConfigEnabled(): void
+    #[DataProvider('invalidConfigProvider')]
+    public function testWillNotCreateServiceWithInvalidConfig(mixed $config, string $message): void
     {
-        $container = $this->createMock(ContainerInterface::class);
+        $this->expectException(InvalidConfigException::class);
+        $this->expectExceptionMessage($message);
 
-        $container->expects($this->once())
-            ->method('has')
-            ->with('config')
-            ->willReturn(true);
-
-        $container->expects($this->once())
-            ->method('get')
-            ->with('config')
-            ->willReturn([
-                FileLockerInterface::class => [
-                    'dirPath' => 'test',
-                ],
-            ]);
-
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage(FileLockerFactory::MESSAGE_MISSING_FILE_LOCKER_CONFIG_ENABLED);
-        (new FileLockerFactory())($container);
+        (new FileLockerFactory())(new InMemoryContainer(['config' => $config]));
     }
 
-    /**
-     * @throws Exception
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     */
-    public function testWillNotCreateServiceWithoutFileLockerConfigDirPath(): void
-    {
-        $container = $this->createMock(ContainerInterface::class);
-
-        $container->expects($this->once())
-            ->method('has')
-            ->with('config')
-            ->willReturn(true);
-
-        $container->expects($this->once())
-            ->method('get')
-            ->with('config')
-            ->willReturn([
-                FileLockerInterface::class => [
-                    'enabled' => false,
-                ],
-            ]);
-
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage(FileLockerFactory::MESSAGE_MISSING_FILE_LOCKER_CONFIG_DIR_PATH);
-        (new FileLockerFactory())($container);
-    }
-
-    /**
-     * @throws Exception
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     */
     public function testCanCreateService(): void
     {
-        $container = $this->createMock(ContainerInterface::class);
+        $service = (new FileLockerFactory())(new InMemoryContainer(['config' => $this->getConfig()]));
 
-        $container->expects($this->once())
-            ->method('has')
-            ->with('config')
-            ->willReturn(true);
-
-        $container->expects($this->once())
-            ->method('get')
-            ->with('config')
-            ->willReturn($this->getConfig());
-
-        $service = (new FileLockerFactory())($container);
         $this->assertInstanceOf(FileLocker::class, $service);
+        $this->assertTrue($service->isEnabled());
+        $this->assertSame(self::LOCK_DIR_PATH, $service->getDirPath());
+    }
+
+    public function testTrimsTrailingSeparatorFromDirPath(): void
+    {
+        $container = new InMemoryContainer([
+            'config' => [FileLockerInterface::class => ['enabled' => true, 'dirPath' => '/var/lock/']],
+        ]);
+
+        $this->assertSame('/var/lock', (new FileLockerFactory())($container)->getDirPath());
+    }
+
+    public function testConfigExceptionIsAContainerException(): void
+    {
+        $this->expectException(ContainerExceptionInterface::class);
+
+        (new FileLockerFactory())(new InMemoryContainer());
     }
 }

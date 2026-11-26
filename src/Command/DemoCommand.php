@@ -10,18 +10,17 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(
-    name: 'demo:command',
+    name: DemoCommand::DEFAULT_NAME,
     description: 'Demo command description.',
 )]
 class DemoCommand extends Command
 {
-    /** @var string $defaultName */
-    protected static $defaultName = 'demo:command';
+    public const string DEFAULT_NAME = 'demo:command';
 
     protected function configure(): void
     {
         $this
-            ->setName(self::$defaultName)
+            ->setName(self::DEFAULT_NAME)
             ->setDescription('Demo command description.');
     }
 
