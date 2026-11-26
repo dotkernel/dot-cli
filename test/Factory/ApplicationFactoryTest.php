@@ -125,8 +125,8 @@ class ApplicationFactoryTest extends TestCase
      */
     public function testWillCreateApplication(): void
     {
-        $container  = $this->createMock(ContainerInterface::class);
-        $fileLocker = $this->createMock(FileLockerInterface::class);
+        $container  = $this->createStub(ContainerInterface::class);
+        $fileLocker = $this->createStub(FileLockerInterface::class);
 
         $container->method('has')->willReturnMap([
             ['config', true],
